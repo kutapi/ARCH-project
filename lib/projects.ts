@@ -10,10 +10,10 @@ export interface Project {
 export const projects: Project[] = [
   {
     id: "1",
-    imageUrl: "", // Empty for placeholder
+    imageUrl: "",
     title: "END Design",
     location: "India, Kochi",
-    iconUrl: "", // Empty for placeholder
+    iconUrl: "",
     featured: false,
   },
   {
@@ -22,10 +22,34 @@ export const projects: Project[] = [
     title: "END Design",
     location: "India, Kochi",
     iconUrl: "",
-    featured: true, // This one gets the blue border hover/active state
+    featured: true,
   },
   {
     id: "3",
+    imageUrl: "",
+    title: "END Design",
+    location: "India, Kochi",
+    iconUrl: "",
+    featured: false,
+  },
+  {
+    id: "4",
+    imageUrl: "",
+    title: "END Design",
+    location: "India, Kochi",
+    iconUrl: "",
+    featured: false,
+  },
+  {
+    id: "5",
+    imageUrl: "",
+    title: "END Design",
+    location: "India, Kochi",
+    iconUrl: "",
+    featured: false,
+  },
+  {
+    id: "6",
     imageUrl: "",
     title: "END Design",
     location: "India, Kochi",
