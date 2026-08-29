@@ -1,0 +1,60 @@
+{
+  "heroImage": "",
+  "projects": [
+    {
+      "id": "1",
+      "imageUrl": "",
+      "iconUrl": "",
+      "title": "END Design",
+      "description": "A modern architectural space designed with minimalism in mind.",
+      "location": "India, Kochi",
+      "featured": false
+    },
+    {
+      "id": "2",
+      "imageUrl": "",
+      "iconUrl": "",
+      "title": "END Design",
+      "description": "A bold residential project that redefines open-plan living.",
+      "location": "India, Kochi",
+      "featured": true
+    },
+    {
+      "id": "3",
+      "imageUrl": "",
+      "iconUrl": "",
+      "title": "END Design",
+      "description": "Commercial space with a focus on natural light and flow.",
+      "location": "India, Kochi",
+      "featured": false
+    },
+    {
+      "id": "4",
+      "imageUrl": "",
+      "iconUrl": "",
+      "title": "END Design",
+      "description": "Urban mixed-use development with sustainable materials.",
+      "location": "India, Kochi",
+      "featured": false
+    },
+    {
+      "id": "5",
+      "imageUrl": "",
+      "iconUrl": "",
+      "title": "END Design",
+      "description": "Luxury villa with panoramic views and bespoke interiors.",
+      "location": "India, Kochi",
+      "featured": false
+    },
+    {
+      "id": "6",
+      "imageUrl": "",
+      "iconUrl": "",
+      "title": "END Design",
+      "description": "A cultural centre celebrating regional craft and architecture.",
+      "location": "India, Kochi",
+      "featured": false
+    }
+  ],
+  "employees": []
+}
