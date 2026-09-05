@@ -8,12 +8,8 @@ export default function SplashScreen() {
   const overlayRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Only show on first visit per session
     if (typeof window === "undefined") return;
-    const seen = sessionStorage.getItem("splash_seen");
-    if (seen) return;
 
-    sessionStorage.setItem("splash_seen", "1");
     setVisible(true);
 
     // Phase timeline
@@ -65,7 +61,7 @@ export default function SplashScreen() {
         {/* LEFT — END Design */}
         <span
           style={{
-            fontFamily: "'Helvetica Neue', 'Inter', Arial, sans-serif",
+            fontFamily: "var(--font-roboto), 'Roboto', 'Helvetica Neue', Arial, sans-serif",
             fontWeight: 700,
             fontSize: "clamp(2rem, 7vw, 6rem)",
             color: "#fff",
@@ -106,7 +102,7 @@ export default function SplashScreen() {
         {/* RIGHT — Mutam */}
         <span
           style={{
-            fontFamily: "'Helvetica Neue', 'Inter', Arial, sans-serif",
+            fontFamily: "var(--font-roboto), 'Roboto', 'Helvetica Neue', Arial, sans-serif",
             fontWeight: 700,
             fontSize: "clamp(2rem, 7vw, 6rem)",
             color: "#fff",
@@ -118,7 +114,7 @@ export default function SplashScreen() {
             willChange: "transform",
           }}
         >
-          Mutam
+          Muttam
         </span>
       </div>
 
