@@ -36,3 +36,14 @@ export async function PUT(req: NextRequest) {
 
   return NextResponse.json({ heroImage: imageUrl });
 }
+
+export async function DELETE(req: NextRequest) {
+  if (!isAuthenticated(req)) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  const data = getCmsData();
+  data.heroImage = "";
+  saveCmsData(data);
+
+  return NextResponse.json({ heroImage: "" });
+}
+

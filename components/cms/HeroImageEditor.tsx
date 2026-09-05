@@ -10,6 +10,7 @@ export default function HeroImageEditor({ initialImage }: { initialImage: string
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [dragging, setDragging] = useState(false);
+  const [removing, setRemoving] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   function handleFile(f: File) {
@@ -42,6 +43,19 @@ export default function HeroImageEditor({ initialImage }: { initialImage: string
     setLoading(false);
   }
 
+  async function handleRemove() {
+    if (!confirm("Remove the hero image? This cannot be undone.")) return;
+    setRemoving(true);
+    const res = await fetch("/api/admin/hero", { method: "DELETE" });
+    if (res.ok) {
+      setHeroImage("");
+      setPreview(null);
+      setFile(null);
+      setSuccess(false);
+    }
+    setRemoving(false);
+  }
+
   const displaySrc = preview || heroImage;
 
   return (
@@ -53,16 +67,28 @@ export default function HeroImageEditor({ initialImage }: { initialImage: string
             This image appears at the top of the main portfolio page.
           </p>
         </div>
-        {file && (
-          <button
-            id="hero-upload-btn"
-            onClick={handleUpload}
-            disabled={loading}
-            className="bg-white text-black font-mono font-bold text-xs px-5 py-2.5 rounded-lg hover:bg-white/90 active:scale-95 transition-all disabled:opacity-40"
-          >
-            {loading ? "Saving…" : "Save Image"}
-          </button>
-        )}
+        <div className="flex items-center gap-2">
+          {heroImage && !preview && (
+            <button
+              id="hero-remove-btn"
+              onClick={handleRemove}
+              disabled={removing}
+              className="border border-red-500/40 text-red-400 font-mono font-bold text-xs px-4 py-2.5 rounded-lg hover:bg-red-500/10 active:scale-95 transition-all disabled:opacity-40"
+            >
+              {removing ? "Removing…" : "Remove Image"}
+            </button>
+          )}
+          {file && (
+            <button
+              id="hero-upload-btn"
+              onClick={handleUpload}
+              disabled={loading}
+              className="bg-white text-black font-mono font-bold text-xs px-5 py-2.5 rounded-lg hover:bg-white/90 active:scale-95 transition-all disabled:opacity-40"
+            >
+              {loading ? "Saving…" : "Save Image"}
+            </button>
+          )}
+        </div>
       </div>
 
       {success && (

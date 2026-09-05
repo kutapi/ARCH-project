@@ -18,9 +18,9 @@ export default function DashboardPage() {
     async function load() {
       // Fetch all three in parallel
       const [heroRes, projectsRes, employeesRes] = await Promise.all([
-        fetch("/api/admin/hero"),
-        fetch("/api/admin/projects"),
-        fetch("/api/admin/employees"),
+        fetch("/api/admin/hero", { cache: "no-store" }),
+        fetch("/api/admin/projects", { cache: "no-store" }),
+        fetch("/api/admin/employees", { cache: "no-store" }),
       ]);
 
       // If any returns 401, session expired — redirect to login

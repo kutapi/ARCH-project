@@ -3,7 +3,7 @@
   "projects": [
     {
       "id": "1",
-      "imageUrl": "",
+      "imageUrl": "/uploads/project-1788616126710-Endless_Tools_2026-08-26_17-43-05.jpg",
       "iconUrl": "",
       "title": "END Design",
       "description": "A modern architectural space designed with minimalism in mind.",
@@ -17,7 +17,7 @@
       "title": "END Design",
       "description": "A bold residential project that redefines open-plan living.",
       "location": "India, Kochi",
-      "featured": true
+      "featured": false
     },
     {
       "id": "3",

@@ -19,35 +19,60 @@ function ImagePicker({
   label,
   current,
   onFile,
+  onClear,
 }: {
   label: string;
   current: string;
   onFile: (f: File) => void;
+  onClear?: () => void;
 }) {
   const ref = useRef<HTMLInputElement>(null);
   const [preview, setPreview] = useState<string | null>(null);
+  const [cleared, setCleared] = useState(false);
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const f = e.target.files?.[0];
     if (!f) return;
     onFile(f);
     setPreview(URL.createObjectURL(f));
+    setCleared(false);
   }
 
-  const src = preview || current;
+  function handleClear(e: React.MouseEvent) {
+    e.stopPropagation();
+    setPreview(null);
+    setCleared(true);
+    if (ref.current) ref.current.value = "";
+    onClear?.();
+  }
+
+  const src = cleared ? null : (preview || current);
 
   return (
-    <div
-      onClick={() => ref.current?.click()}
-      className="cursor-pointer rounded-lg border-2 border-dashed border-white/[0.1] hover:border-white/25 transition-all flex items-center justify-center overflow-hidden bg-white/[0.03]"
-      style={{ width: 80, height: 60 }}
-    >
-      {src ? (
-        <Image src={src} alt={label} width={80} height={60} className="w-full h-full object-cover" unoptimized={src.startsWith("blob:")} />
-      ) : (
-        <span className="text-white/20 text-xs font-mono text-center px-1">{label}</span>
+    <div className="relative" style={{ width: 80 }}>
+      <div
+        onClick={() => ref.current?.click()}
+        className="cursor-pointer rounded-lg border-2 border-dashed border-white/[0.1] hover:border-white/25 transition-all flex items-center justify-center overflow-hidden bg-white/[0.03]"
+        style={{ width: 80, height: 60 }}
+      >
+        {src ? (
+          <Image src={src} alt={label} width={80} height={60} className="w-full h-full object-cover" unoptimized={src.startsWith("blob:")} />
+        ) : (
+          <span className="text-white/20 text-xs font-mono text-center px-1">{label}</span>
+        )}
+        <input ref={ref} type="file" accept="image/*" className="hidden" onChange={handleChange} />
+      </div>
+      {src && (
+        <button
+          type="button"
+          onClick={handleClear}
+          className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-red-500 rounded-full flex items-center justify-center text-white hover:bg-red-400 transition-all z-10"
+          title="Remove image"
+          style={{ fontSize: 12, lineHeight: 1 }}
+        >
+          ×
+        </button>
       )}
-      <input ref={ref} type="file" accept="image/*" className="hidden" onChange={handleChange} />
     </div>
   );
 }
@@ -59,20 +84,24 @@ function ProjectRow({
 }: {
   project: Project;
   onDelete: () => void;
-  onSave: (p: Project, imageFile?: File, iconFile?: File) => Promise<void>;
+  onSave: (p: Project, imageFile?: File, iconFile?: File, clearImage?: boolean, clearIcon?: boolean) => Promise<void>;
 }) {
   const [editing, setEditing] = useState(false);
   const [form, setForm] = useState<EditingProject>({ ...project });
   const [imageFile, setImageFile] = useState<File | undefined>();
   const [iconFile, setIconFile] = useState<File | undefined>();
+  const [clearImage, setClearImage] = useState(false);
+  const [clearIcon, setClearIcon] = useState(false);
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
   async function handleSave() {
     setSaving(true);
-    await onSave({ ...form, id: project.id } as Project, imageFile, iconFile);
+    await onSave({ ...form, id: project.id } as Project, imageFile, iconFile, clearImage, clearIcon);
     setSaving(false);
     setEditing(false);
+    setClearImage(false);
+    setClearIcon(false);
   }
 
   async function handleDelete() {
@@ -153,11 +182,21 @@ function ProjectRow({
           <div className="flex items-center gap-6">
             <div className="flex flex-col gap-1.5">
               <label className="font-mono text-[10px] uppercase tracking-widest text-white/30">Main Image</label>
-              <ImagePicker label="Upload" current={form.imageUrl} onFile={(f) => setImageFile(f)} />
+              <ImagePicker
+                label="Upload"
+                current={form.imageUrl}
+                onFile={(f) => { setImageFile(f); setClearImage(false); }}
+                onClear={() => { setImageFile(undefined); setClearImage(true); }}
+              />
             </div>
             <div className="flex flex-col gap-1.5">
               <label className="font-mono text-[10px] uppercase tracking-widest text-white/30">Icon</label>
-              <ImagePicker label="Upload" current={form.iconUrl} onFile={(f) => setIconFile(f)} />
+              <ImagePicker
+                label="Upload"
+                current={form.iconUrl}
+                onFile={(f) => { setIconFile(f); setClearIcon(false); }}
+                onClear={() => { setIconFile(undefined); setClearIcon(true); }}
+              />
             </div>
             <div className="flex items-center gap-2 ml-auto self-end pb-1">
               <input
@@ -298,7 +337,7 @@ function AddProjectForm({ onAdd }: { onAdd: (p: Project) => void }) {
 export default function ProjectsEditor({ initialProjects }: { initialProjects: Project[] }) {
   const [projects, setProjects] = useState<Project[]>(initialProjects);
 
-  async function handleSave(p: Project, imageFile?: File, iconFile?: File) {
+  async function handleSave(p: Project, imageFile?: File, iconFile?: File, clearImage?: boolean, clearIcon?: boolean) {
     const fd = new FormData();
     fd.append("title", p.title);
     fd.append("description", p.description);
@@ -306,6 +345,8 @@ export default function ProjectsEditor({ initialProjects }: { initialProjects: P
     fd.append("featured", String(p.featured));
     if (imageFile) fd.append("imageFile", imageFile);
     if (iconFile) fd.append("iconFile", iconFile);
+    if (clearImage) fd.append("clearImage", "true");
+    if (clearIcon) fd.append("clearIcon", "true");
 
     const res = await fetch(`/api/admin/projects/${p.id}`, { method: "PUT", body: fd });
     if (res.ok) {

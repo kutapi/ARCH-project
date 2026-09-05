@@ -28,6 +28,8 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
   const featured = formData.get("featured") === "true";
   const imageFile = formData.get("imageFile") as File | null;
   const iconFile = formData.get("iconFile") as File | null;
+  const clearImage = formData.get("clearImage") === "true";
+  const clearIcon = formData.get("clearIcon") === "true";
 
   const data = getCmsData();
   const idx = data.projects.findIndex((p) => p.id === id);
@@ -38,10 +40,15 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
   if (location !== null) data.projects[idx].location = location;
   data.projects[idx].featured = featured;
 
-  if (imageFile && imageFile.size > 0) {
+  if (clearImage) {
+    data.projects[idx].imageUrl = "";
+  } else if (imageFile && imageFile.size > 0) {
     data.projects[idx].imageUrl = await saveUpload(imageFile, "project");
   }
-  if (iconFile && iconFile.size > 0) {
+
+  if (clearIcon) {
+    data.projects[idx].iconUrl = "";
+  } else if (iconFile && iconFile.size > 0) {
     data.projects[idx].iconUrl = await saveUpload(iconFile, "icon");
   }
 

@@ -2,7 +2,7 @@
 
 @theme inline {
   --font-sans: var(--font-roboto);
-  --font-mono: var(--font-jetbrains-mono);
+  --font-mono: var(--font-roboto);
 }
 
 body {
