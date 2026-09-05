@@ -7,7 +7,7 @@ import { getCmsData } from "@/lib/cms-data";
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
-  const { heroImage, projects } = getCmsData();
+  const { heroImage, projects } = await getCmsData();
 
   return (
     <>
