@@ -30,7 +30,7 @@ export default function ProjectGrid({ projects }: { projects: Project[] }) {
         className="grid grid-cols-1 gap-4 w-full max-w-7xl mx-auto py-6 md:py-8 justify-items-center"
       >
         {projects.map((project) => (
-          <div key={project.id} style={{ opacity: 0 }} className="w-full max-w-[800px]">
+          <div key={project.id} style={{ opacity: 0 }} className="w-fit">
             <ProjectCard
               project={project}
               onClick={() => setSelected(project)}
